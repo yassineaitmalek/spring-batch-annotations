@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="warn" allowDynamicVariables="true">
+    <properties>
+        <property name="LOGS" value="${spring:logging.path}" />
+        <property name="APP" value="${spring:spring.application.name}" />
+        <Property name="defaultPattern">%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</Property>
+
+    </properties>
+    <Appenders>
+        <Console name="consoleLogger" target="SYSTEM_OUT">
+            <PatternLayout pattern="${defaultPattern}" />
+        </Console>
+
+        <RollingFile name="fileLogger" fileName="${LOGS}/${APP}.log"
+            filePattern="${LOGS}/${APP}-%d{yyyy-MM-dd-HH-mm}-%i.log">
+
+            <PatternLayout pattern="${defaultPattern}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="60" modulate="true" />
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${LOGS}" maxDepth="10">
+                    <IfLastModified age="30m" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+
+        <Root level="info" additivity="false">
+            <AppenderRef ref="consoleLogger" />
+            <AppenderRef ref="fileLogger" />
+        </Root>
+    </Loggers>
+</Configuration>
