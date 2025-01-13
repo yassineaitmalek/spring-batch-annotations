@@ -1,5 +1,7 @@
 package com.test.infrastructure.batch.reader;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
@@ -11,22 +13,21 @@ import org.springframework.stereotype.Component;
 
 import com.test.persistence.models.local.Person;
 
+import lombok.RequiredArgsConstructor;
+
 @StepScope
 @Component
+@RequiredArgsConstructor
 public class PersonFileItemReader extends FlatFileItemReader<Person> {
 
   private final PersonFieldSetMapper personFieldSetMapper;
 
-  private String filePath;
+  @Value("${person.data}")
+  private final String filePath;
 
-  public PersonFileItemReader(PersonFieldSetMapper personFieldSetMapper, @Value("${person.data}") String filePath) {
-    this.personFieldSetMapper = personFieldSetMapper;
-    this.filePath = filePath;
-    init();
-  }
-
+  @PostConstruct
   private void init() {
-    setResource(new FileSystemResource(filePath)); // your file path here
+    setResource(new FileSystemResource(filePath));
     setLineMapper(lineMapper());
     this.setLinesToSkip(1);
   }
@@ -42,7 +43,7 @@ public class PersonFileItemReader extends FlatFileItemReader<Person> {
   public LineTokenizer lineTokenizer() {
     DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
     tokenizer.setDelimiter(";;");
-    tokenizer.setNames("reference", "name", "email", "address"); // assuming these are the column names
+    tokenizer.setNames("reference", "name", "email", "address");
     return tokenizer;
   }
 

@@ -3,23 +3,22 @@ package com.test.infrastructure.batch;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BatchRun {
 
-    @Autowired
-    private JobLauncher jobLauncher;
+    private final JobLauncher jobLauncher;
 
-    @Autowired
     @Qualifier("insert-person-from-file-job")
-    private Job insert_person_from_file_job;
+    private final Job insert_person_from_file_job;
 
-    @Autowired
     @Qualifier("insert-person-from-query-job")
-    private Job insert_person_from_query_job;
+    private final Job insert_person_from_query_job;
 
     public void runJobInsertPersonFromFile() {
 

@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 
 import com.test.persistence.repositories.local.PersonRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PersonFileReaderListener extends StepExecutionListenerSupport {
@@ -16,7 +18,9 @@ public class PersonFileReaderListener extends StepExecutionListenerSupport {
 
   @Override
   public void beforeStep(StepExecution stepExecution) {
+    log.info("Before step Delete all persons");
     personRepository.deleteAll();
+    log.info("Before step Delete all persons done");
   }
 
   @Override
